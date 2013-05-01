@@ -7,6 +7,8 @@ Takes payment data exported from a Review File of order records. Outputs a tab-d
 
 # Requirements
 ## Windows .exe version
+Download [Windows .exe file] (http://infomuse.net/millennium-helpers/payment_info_processor.exe). If a window pops up and asks you whether to save or open the file, select save. 
+
 No need to install Ruby. Use by double-clicking the .exe file. 
 
 The script does require a specific directory set-up for location of the input file, output file, and the script itself. See below in "How to use" section.
