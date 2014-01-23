@@ -39,7 +39,7 @@ The structure should look like this:
 
 Put the payment_info_processor .rb or .exe file(s) in the ruby_scripts directory.
 
-''Note for more advanced users: You can run the script from anywhere; there doesn't have to be a ruby_scripts directory. BUT, there must be a data directory and an output directory in whatever directory you are running the script from. It's clunky and inflexible, but it is the only way I know to make the .exe version work for my colleagues who are terrified of the command line.''
+_Note for more advanced users: You can run the script from anywhere; there doesn't have to be a ruby_scripts directory. BUT, there must be a data directory and an output directory in whatever directory you are running the script from. It's clunky and inflexible, but it is the only way I know to make the .exe version work for my colleagues who are terrified of the command line._
 
 ## Prepare your configuration file (First use only)
 The configuration file will tell the script when your new fiscal year begins. I will use my institution as an example. Our fiscal year runs from July 1 to June 30.
