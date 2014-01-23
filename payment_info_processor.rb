@@ -1,19 +1,84 @@
 require 'rubygems'
 require 'highline/import'
 require 'date'
-
-# Script history
-# 20101027 - Original script produced
-#            One output option: summary by fiscal year
-#            Output: .csv
-# 20120531 - Added individual payment output option.
-# 20130416 - Changed output to .txt due to Excel's poor recognition
-#              of character encoding when opening .csv files
+require 'pathname'
 
 exit if Object.const_defined?(:Ocra)
+
+#test that config file exists
+config_path = Pathname.new("data/payment_processor_config.txt")
+unless config_path.exist?
+  puts "\n\nCannot find config file: data/payment_processor_config.txt"
+  puts "Please see documentation at:"
+  puts "   https://github.com/UNC-Libraries/Millennium-Helpers\n\n"
+  exit
+end
+
+#load config settings into array
+config_lines = []
+config_path.each_line do |ln|
+  ln.chomp!
+  config_lines << ln
+end
+
+#make sure the month is set properly
+unless config_lines[0].match(/^fy_begin_month = \d\d?\s*$/)
+  puts "\n\nFY begin month not properly set in config file."
+  puts "Please see documentation at:"
+  puts "   https://github.com/UNC-Libraries/Millennium-Helpers\n\n"
+  exit
+end
+
+#make sure the day is set properly
+unless config_lines[1].match(/^fy_begin_day = \d\d?\s*$/)
+  puts "\n\nFY begin day not properly set in config file."
+  puts "Please see documentation at:"
+  puts "   https://github.com/UNC-Libraries/Millennium-Helpers\n\n"
+  exit
+end
+
+#set the fy start variables
+$fystartmonth = config_lines[0].gsub /^.* = /, ''
+$fystartday = config_lines[1].gsub /^.* = /, ''
+
+#make sure date created from config month and year is valid
+unless Date.valid_date?(2012, $fystartmonth.to_i, $fystartday.to_i)
+  puts "\n\nThe month and day in your config file do not combine to create a valid date."
+  puts "Please see documentation at:"
+  puts "   https://github.com/UNC-Libraries/Millennium-Helpers\n\n"
+  exit  
+end
+
+def find_fy(adate)
+  theyear = adate.year
+  fystartnum = Date.new(theyear, $fystartmonth.to_i, $fystartday.to_i).yday
+  paydatenum = adate.yday
+  if paydatenum >= fystartnum
+    fy = theyear.to_i
+  else
+    fy = theyear.to_i - 1
+  end
+end
+
+def set_full_year(yr)
+  if yr.to_i > 50
+    fullyr = '19' + yr
+  else
+    fullyr = '20' + yr
+  end
+  return fullyr
+end
+
+def get_fy_label(yr)
+  thisyear = yr.to_i
+  nextyear = thisyear + 1
+  label = "FY#{thisyear}-#{nextyear}"
+  return label
+end
+
 puts "\n\n\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
 puts "Welcome to the Millennium Payment Data Processor".upcase
-puts "version 1.2.0, 2013-04-16"
+puts "version 1.3.0, 2014-01-23"
 puts "written by Kristina Spurgin, ESM, kspurgin@email.unc.edu"
 puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
 puts "\n\nINPUT:"
@@ -129,22 +194,15 @@ choose do |menu|
 
         paid_date = payment[0]
         pd = paid_date.split "-"
-        if pd[2].to_i > 80
-          paidyear = "19" + pd[2]
-        else
-          paidyear = "20" + pd[2]
-        end
 
+        paidyear = set_full_year(pd[2])
+        
         paid_date_f = Date.new paidyear.to_i, pd[0].to_i, pd[1].to_i
 
-        yr = paid_date_f.year
-        mo = paid_date_f.month
-        if mo > 6
-          fiscal_yr = yr
-        else
-          fiscal_yr = yr-1
-        end
-        @output_lines << [order_num, fiscal_yr, other_data, payment].flatten.join("\t")
+        fiscalyr = find_fy(paid_date_f)
+        fylabel = get_fy_label(fiscalyr)
+        
+        @output_lines << [order_num, fylabel, other_data, payment].flatten.join("\t")
       end
    end
 
@@ -205,26 +263,22 @@ menu.choice :summary_of_payments_per_fiscal_year do
       @pds = paid_date
     
       pd = paid_date.split "-"
-      if pd[2].to_i > 80
-        pdyr = "19" + pd[2]
-      else
-        pdyr = "20" + pd[2]
-      end
+      pdyr = set_full_year(pd[2])
 
       @paid_date = Date.new pdyr.to_i, pd[0].to_i, pd[1].to_i
       @amount = amount
-      @fy = find_fy @paid_date
+      @fy = find_fy(@paid_date)
     end
 
-    def find_fy date
-      yr = date.year
-      mo = date.month
-      if mo > 6
-        return yr
-      else
-        return yr-1
-      end
-    end
+    # def find_fy date
+    #   yr = date.year
+    #   mo = date.month
+    #   if mo > 6
+    #     return yr
+    #   else
+    #     return yr-1
+    #   end
+    # end
   end
 
   lines.each do |l|
@@ -274,10 +328,7 @@ menu.choice :summary_of_payments_per_fiscal_year do
   output = []
   yrlabels = []
   @@rawyears.each do |yr|
-    yrn = yr.to_i
-    nextyr = yrn + 1
-    label = "FY#{yrn}-#{nextyr}"
-    yrlabels << label
+    yrlabels << get_fy_label(yr)
   end
   output << [hdr[:onum], hdr[:other_headers], yrlabels].flatten.join("\t")
   @orders.each do |ord|
