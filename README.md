@@ -6,7 +6,7 @@ Takes payment data exported from a Review File of order records. Outputs a tab-d
 - *Payments summarized by fiscal year* - outputs one line per order record. Each line contains order record number, (other fields exported), and one column for each fiscal year input by script user. Each of these columns contains total payment amount for that fiscal year.
 
 # Get the script
-- Click the "Download ZIP" button in the righthand column
+- Click the "Download ZIP" button in the righthand column of https://github.com/UNC-Libraries/Millennium-Helpers
 - Save file to your computer
 - Unzip! 
 
