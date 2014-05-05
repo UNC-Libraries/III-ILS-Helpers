@@ -5,6 +5,11 @@ Takes payment data exported from a Review File of order records. Outputs a tab-d
 - *Individual payments* - outputs one line per payment made. Data can be further processed in Excel using PivotTables or other means. Each line contains order record number, fiscal year of payment, (other fields exported), payment data fields.
 - *Payments summarized by fiscal year* - outputs one line per order record. Each line contains order record number, (other fields exported), and one column for each fiscal year input by script user. Each of these columns contains total payment amount for that fiscal year.
 
+# Get the script
+- Click the "Download ZIP" button in the righthand column
+- Save file to your computer
+- Unzip! 
+
 # Requirements
 ## Windows .exe version
 Download [Windows .exe file] (http://infomuse.net/millennium-helpers/payment_info_processor.exe). If a window pops up and asks you whether to save or open the file, select save. 
