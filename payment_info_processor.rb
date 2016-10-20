@@ -179,14 +179,14 @@ choose do |menu|
     lines.each do |l|
       line = l.split("*")
       order_num = line.shift
- 
+      
       # How many fields come before the payment data starts?
       # However many times that is, shift the next field in the line to :other
       other_data = []
       hdr[:other_headers].size.times do
         other_data << line.shift
       end
- 
+      
       # smoosh payments back together in one string and separate by ;
       payment_lines = line.join("*").split(";")
       payment_lines.each do |pline|
@@ -204,151 +204,151 @@ choose do |menu|
         
         @output_lines << [order_num, fylabel, other_data, payment].flatten.join("\t")
       end
-   end
-
-File.open "output/payments.txt", "wb" do |f|
-@output_lines.each {|l| f.puts l}
-end
-
-  
-  puts "\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-  puts "Done!"
-  puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-  puts "Results are in your \"rubyscripts\\output\" folder."
-  puts "Look for a file called \"payments.txt\""
-end
-
-menu.choice :summary_of_payments_per_fiscal_year do 
-  @orders = []
-  
-  puts "Enter the years for which you want summary data."
-  puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-  puts "If you want FY2009-10, FY2010-11, and FY2011-12, type:"
-  puts "\n\n  2009,2010,2011\n\n"
-  puts "Important:\n - the years are separated by commas\n - there are NO spaces in between dates and commas"
-  puts " - the years are four digits\n - entering 2009 gets you FY2009-10\n - entering 2010 gets you FY2010-11, and so on."
-  puts "\n\nYou can request as many years as you like."
-  puts "If there is no data for a year, its values will be zero."
-  puts "\n\nType years below and hit enter/return:"
-
-  @@rawyears = gets.chomp.split(",")
-  #@@rawyears = ARGV[1].split(",")
-  # p rawyears
-
-  class Order
-    attr_accessor :onum, :other, :payments, :years
-    def initialize(onum)
-      @onum = onum
-      @other = []
-      @payments = []
-      @years = {}
-
-      @@rawyears.each do |yr|
-        @years[yr] = 0.0
-      end
     end
 
-    def calculate
-      self.payments.each do |pmt|
-        if self.years.has_key? pmt.fy.to_s
-          self.years[pmt.fy.to_s] += pmt.amount.to_f
+    File.open "output/payments.txt", "wb" do |f|
+      @output_lines.each {|l| f.puts l}
+    end
+
+    
+    puts "\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+    puts "Done!"
+    puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+    puts "Results are in your \"rubyscripts\\output\" folder."
+    puts "Look for a file called \"payments.txt\""
+  end
+
+  menu.choice :summary_of_payments_per_fiscal_year do 
+    @orders = []
+    
+    puts "Enter the years for which you want summary data."
+    puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+    puts "If you want FY2009-10, FY2010-11, and FY2011-12, type:"
+    puts "\n\n  2009,2010,2011\n\n"
+    puts "Important:\n - the years are separated by commas\n - there are NO spaces in between dates and commas"
+    puts " - the years are four digits\n - entering 2009 gets you FY2009-10\n - entering 2010 gets you FY2010-11, and so on."
+    puts "\n\nYou can request as many years as you like."
+    puts "If there is no data for a year, its values will be zero."
+    puts "\n\nType years below and hit enter/return:"
+
+    @@rawyears = gets.chomp.split(",")
+    #@@rawyears = ARGV[1].split(",")
+    # p rawyears
+
+    class Order
+      attr_accessor :onum, :other, :payments, :years
+      def initialize(onum)
+        @onum = onum
+        @other = []
+        @payments = []
+        @years = {}
+
+        @@rawyears.each do |yr|
+          @years[yr] = 0.0
+        end
+      end
+
+      def calculate
+        self.payments.each do |pmt|
+          if self.years.has_key? pmt.fy.to_s
+            self.years[pmt.fy.to_s] += pmt.amount.to_f
+          end
         end
       end
     end
-  end
 
-  class Payment
-    attr_accessor :pds, :paid_date, :amount, :fy
-    def initialize paid_date, amount
-      @pds = paid_date
-    
-      pd = paid_date.split "-"
-      pdyr = set_full_year(pd[2])
+    class Payment
+      attr_accessor :pds, :paid_date, :amount, :fy
+      def initialize paid_date, amount
+        @pds = paid_date
+        
+        pd = paid_date.split "-"
+        pdyr = set_full_year(pd[2])
 
-      @paid_date = Date.new pdyr.to_i, pd[0].to_i, pd[1].to_i
-      @amount = amount
-      @fy = find_fy(@paid_date)
+        @paid_date = Date.new pdyr.to_i, pd[0].to_i, pd[1].to_i
+        @amount = amount
+        @fy = find_fy(@paid_date)
+      end
+
+      # def find_fy date
+      #   yr = date.year
+      #   mo = date.month
+      #   if mo > 6
+      #     return yr
+      #   else
+      #     return yr-1
+      #   end
+      # end
     end
 
-    # def find_fy date
-    #   yr = date.year
-    #   mo = date.month
-    #   if mo > 6
-    #     return yr
-    #   else
-    #     return yr-1
-    #   end
-    # end
-  end
+    lines.each do |l|
+      line = l.split("*")
+      ord = Order.new(line.shift)
+      
+      # How many fields come before the payment data starts?
+      # However many times that is, shift the next field in the line to :other
 
-  lines.each do |l|
-    line = l.split("*")
-    ord = Order.new(line.shift)
- 
-    # How many fields come before the payment data starts?
-    # However many times that is, shift the next field in the line to :other
+      hdr[:other_headers].size.times do
+        ord.other << line.shift
+      end
+      
+      # smoosh payments back together in one string and separate by ;
+      payment_lines = line.join("*").split(";")
+      payments = []
+      payment_lines.each do |pline|
+        payment = pline.split "*"
+        payments << payment
+      end
 
-    hdr[:other_headers].size.times do
-      ord.other << line.shift
+      payments.each do |pmt|
+        # 0 element = payment date
+        # 3 element = amount
+        p = Payment.new pmt[0], pmt[3]
+        ord.payments << p
+      end
+      @orders << ord
+
+    end    
+
+    @orders.each {|ord| ord.calculate}
+
+    # check calculations
+    #@orders.each do |ord|
+    #  puts "\n\n#{ord.onum}"
+    #  puts ord.other[0]
+    #  ord.payments.each {|pmt| p pmt.amount if @@rawyears.include? pmt.fy.to_s}
+    #  ord.years.each_pair do  |k,v|
+    #    yr = k.to_i
+    #    nyr = yr + 1
+    #    puts "FY#{yr.to_s}-#{nyr.to_s}: $#{v}"
+    #  end
+    #end
+
+
+    output = []
+    yrlabels = []
+    @@rawyears.each do |yr|
+      yrlabels << get_fy_label(yr)
     end
- 
-    # smoosh payments back together in one string and separate by ;
-    payment_lines = line.join("*").split(";")
-    payments = []
-    payment_lines.each do |pline|
-      payment = pline.split "*"
-      payments << payment
+    output << [hdr[:onum], hdr[:other_headers], yrlabels].flatten.join("\t")
+    @orders.each do |ord|
+      out = []
+      out << ord.onum
+      out << ord.other
+      ord.years.each_value {|yr| out << yr}
+      output << out.flatten.join("\t")
     end
 
-    payments.each do |pmt|
-      # 0 element = payment date
-      # 3 element = amount
-      p = Payment.new pmt[0], pmt[3]
-      ord.payments << p
+    File.open "output/payment_summary.txt", "wb" do |f|
+      output.each {|l| f.puts l}
     end
-    @orders << ord
 
-  end    
-
-  @orders.each {|ord| ord.calculate}
-
-  # check calculations
-  #@orders.each do |ord|
-  #  puts "\n\n#{ord.onum}"
-  #  puts ord.other[0]
-  #  ord.payments.each {|pmt| p pmt.amount if @@rawyears.include? pmt.fy.to_s}
-  #  ord.years.each_pair do  |k,v|
-  #    yr = k.to_i
-  #    nyr = yr + 1
-  #    puts "FY#{yr.to_s}-#{nyr.to_s}: $#{v}"
-  #  end
-  #end
-
-
-  output = []
-  yrlabels = []
-  @@rawyears.each do |yr|
-    yrlabels << get_fy_label(yr)
+    puts "\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+    puts "Done!"
+    puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+    puts "Results are in your \"rubyscripts\\output\" folder."
+    puts "Look for a file called \"payment_summary.txt\""
   end
-  output << [hdr[:onum], hdr[:other_headers], yrlabels].flatten.join("\t")
-  @orders.each do |ord|
-    out = []
-    out << ord.onum
-    out << ord.other
-    ord.years.each_value {|yr| out << yr}
-    output << out.flatten.join("\t")
-  end
-
-File.open "output/payment_summary.txt", "wb" do |f|
-  output.each {|l| f.puts l}
-end
-
-  puts "\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-  puts "Done!"
-  puts "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-  puts "Results are in your \"rubyscripts\\output\" folder."
-  puts "Look for a file called \"payment_summary.txt\""
-end
 end
 
 puts "Press return/enter to exit."
