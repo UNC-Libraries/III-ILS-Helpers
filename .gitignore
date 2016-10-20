@@ -1,3 +1,4 @@
 *.exe
 data/
 output/
+payment_info_processor_carat.rb
