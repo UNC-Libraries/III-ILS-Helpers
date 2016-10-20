@@ -53,13 +53,16 @@ Save the file into your ruby_scripts directory.
 - Install [Ruby] (http://www.ruby-lang.org/en/). Point-and-click Windows .exe Ruby installers are [available for Windows] (http://rubyinstaller.org/).
 
 - Install the Ruby Gem called [Highline] (http://highline.rubyforge.org/). To install this Gem, open the command line shell and type the following commands: 
--- gem install highline
+
+```
+gem install highline
+```
 
 - Download the script
--- Click the "Download ZIP" button in the righthand column of https://github.com/UNC-Libraries/Millennium-Helpers
--- Save file to your computer
--- Unzip! 
--- Move payment_info_processor.rb to ruby_scripts directory
+ - Click the "Download ZIP" button in the righthand column of https://github.com/UNC-Libraries/Millennium-Helpers
+ - Save file to your computer
+ - Unzip the file you just saved
+ - Move payment_info_processor.rb to ruby_scripts directory
 
 
 # Regular use
