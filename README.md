@@ -1,7 +1,10 @@
-**Quick download links:** [Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe) - [pre-Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor.exe) - [Ruby script (.rb) .zip] (https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
+**Quick download links:** 
+- [Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe) 
+- [pre-Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor.exe) 
+- [Ruby script (.rb) .zip] (https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
 
-# Millennium Payment Information Processor
-A helper for working with payment data exported from III Millennium. The Windows .exe version of the script can be run by any Windows user, without the need to install Ruby and other dependencies. 
+# Millennium/Sierra Payment Information Processor
+A helper for working with payment data exported from III Millennium or Sierra. The Windows .exe version of the script can be run by any Windows user, without the need to install Ruby and other dependencies. 
 
 Takes payment data exported from a Review File of order records. Outputs a tab-delimited .txt file that can be opened with Excel. There are two output types to choose from: 
 - *Individual payments* - outputs one line per payment made. Data can be further processed in Excel using PivotTables or other means. Each line contains order record number, fiscal year of payment, (other fields exported), payment data fields.
