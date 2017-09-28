@@ -3,6 +3,8 @@
 - [pre-Windows 10 .exe](http://infomuse.net/millennium-helpers/payment_info_processor.exe) 
 - [Ruby script (.rb) .zip](https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
 
+**Script not working for you?** Check [here](https://github.com/UNC-Libraries/III-ILS-Helpers#frequent-issues-that-prevent-script-from-running-properly)
+
 # Millennium/Sierra Payment Information Processor
 A helper for working with payment data exported from III Millennium or Sierra. The Windows .exe version of the script can be run by any Windows user, without the need to install Ruby and other dependencies. 
 
