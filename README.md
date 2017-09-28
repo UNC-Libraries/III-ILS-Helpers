@@ -1,7 +1,7 @@
 **Quick download links:** 
-- [Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe) 
-- [pre-Windows 10 .exe] (http://infomuse.net/millennium-helpers/payment_info_processor.exe) 
-- [Ruby script (.rb) .zip] (https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
+- [Windows 10 .exe](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe) 
+- [pre-Windows 10 .exe](http://infomuse.net/millennium-helpers/payment_info_processor.exe) 
+- [Ruby script (.rb) .zip](https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
 
 # Millennium/Sierra Payment Information Processor
 A helper for working with payment data exported from III Millennium or Sierra. The Windows .exe version of the script can be run by any Windows user, without the need to install Ruby and other dependencies. 
@@ -47,15 +47,15 @@ Change the number at the end of each line to reflect when your new fiscal year b
 
 ## Windows .exe version
 Download Windows .exe file: 
-- [pre-Windows 10] (http://infomuse.net/millennium-helpers/payment_info_processor.exe)
-- [Windows 10] (http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)
+- [pre-Windows 10](http://infomuse.net/millennium-helpers/payment_info_processor.exe)
+- [Windows 10](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)
 
 If a window pops up and asks you whether to save or open the file, select save. 
 
 Save the file into your ruby_scripts directory.
 
 ## Ruby script (.rb) version
-- Install [Ruby] (http://www.ruby-lang.org/en/). Point-and-click Windows .exe Ruby installers are [available for Windows] (http://rubyinstaller.org/).
+- Install [Ruby](http://www.ruby-lang.org/en/). Point-and-click Windows .exe Ruby installers are [available for Windows](http://rubyinstaller.org/).
 
 - Install the Ruby Gem called [Highline] (http://highline.rubyforge.org/). To install this Gem, open the command line shell and type the following commands: 
 
@@ -104,3 +104,19 @@ At command line, from inside ruby_scripts directory:
 The output files will be put in the "output" directory inside your "ruby_scripts" directory
 
 Open the .txt files with Excel. Choose "65001 : Unicode (UTF-8)" as file origin (encoding) to properly display diacritics.
+
+
+# Frequent issues that prevent script from running properly
+If the script is failing to work for you, check the following: 
+
+- Did you export your payment_data.txt file from a list of bib records (or other non-order record types)? Unfortunately you have to do the export from a list of order records. 
+- Is there a typo in your input file name? It must be: payment_data.txt
+- And, if you just got a new computer: 
+  - Did you [define the beginning of your library's fiscal year in the configuration file](https://github.com/UNC-Libraries/III-ILS-Helpers#prepare-your-configuration-file-first-use-only)?
+  - If new computer is running Windows 10, did you get the [Windows 10 version of the script](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)?
+  
+If none of those are the culprit, please go [here](https://github.com/UNC-Libraries/III-ILS-Helpers/issues) and open a new issue. Please attach the following: 
+- your payment_data.txt input file
+- a screenshot of your Create Lists export settings before you start the export
+
+Please summarize the script options you are using---individual payments vs. summary by fiscal year. If the latter, please say which fiscal years you input. 
