@@ -176,7 +176,7 @@ lines = IO.readlines("data/payment_data.txt")
 =begin
 First two lines of file:
 RECORD #(ORDER)*TITLE*FUND*Paid Date*Invoice Date*Invoice Num*Amount Paid*Voucher Num*Copies*Sub From*Sub To*Note
-o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821
+o10002066*Africa research bulletin.*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821
 =end
 
 lines.each {|l| l.gsub! /"/, '' ; l.chomp!}
@@ -187,7 +187,7 @@ headers = lines.shift.split("*")
 =begin
 headers = ["RECORD #(ORDER)", "TITLE", "FUND", "Paid Date", "Invoice Date", "Invoice Num", "Amount Paid", "Voucher Num", "Copies", "Sub From", "Sub To", "Note"]
 
-lines = "o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+lines = "o10002066*Africa research bulletin.*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
 =end
 
 hdr = {}
@@ -257,18 +257,24 @@ The join turns these into one tab-delimited string:
 =begin
 We only have one line in the lines variable, for demo purposes:
 
-lines = "o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+lines = "o10002066*Africa research bulletin.*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
 =end
     
     lines.each do |l|
       line = l.split("*")
       
 =begin
-line = ["o10002066", "Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].", "esoci", "06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", "12-31-10", "46(01/10)-47(12/10)!B9451699;02-28-11", "02-16-11", "0199422", "1662.09", "224256", "001", "01-01-11", "12-31-11", "47(01/11)-48(12/11)!D4685821"]
+line = ["o10002066", "Africa research bulletin.", "esoci", "06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", "12-31-10", "46(01/10)-47(12/10)!B9451699;02-28-11", "02-16-11", "0199422", "1662.09", "224256", "001", "01-01-11", "12-31-11", "47(01/11)-48(12/11)!D4685821"]
 =end
 
       order_num = line.shift
       
+=begin
+order_num = "o10002066"
+
+line = ["Africa research bulletin.", "esoci", "06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", "12-31-10", "46(01/10)-47(12/10)!B9451699;02-28-11", "02-16-11", "0199422", "1662.09", "224256", "001", "01-01-11", "12-31-11", "47(01/11)-48(12/11)!D4685821"]
+=end
+
       # How many fields come before the payment data starts?
       # However many times that is, shift the next field in the line to :other
       other_data = []
@@ -276,24 +282,129 @@ line = ["o10002066", "Africa research bulletin. Economic, financial, and technic
         other_data << line.shift
       end
       
+=begin
+order_num = "o10002066"
+
+other_data = ["Africa research bulletin.", "esoci"]
+
+line = ["06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", "12-31-10", "46(01/10)-47(12/10)!B9451699;02-28-11", "02-16-11", "0199422", "1662.09", "224256", "001", "01-01-11", "12-31-11", "47(01/11)-48(12/11)!D4685821"]
+
+?? What do you notice that is funky in the data we still have left in the line variable? 
+?
+?
+?
+?
+?
+?
+?
+?
+?
+?
+?
+?
+?
+=end
+
       # smoosh payments back together in one string and separate by ;
       payment_lines = line.join("*").split(";")
+
+=begin
+line.join('*') produces: 
+"06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+
+Adding the split on this, we get: 
+payment_lines = [
+                 "06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699",
+                 "02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+                ]
+=end
+      
       payment_lines.each do |pline|
+
+=begin
+The first pline is: 
+"06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699",
+=end
+        
         payment = pline.split "*"
 
-        paid_date = payment[0]
-        pd = paid_date.split "-"
+=begin
+payment = ["06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", 
+           "12-31-10", "46(01/10)-47(12/10)!B9451699"]
+=end
+
+        paid_date = payment[0] # "06-02-10"
+        
+        pd = paid_date.split "-" # ["06", "02", "10"]
 
         paidyear = set_full_year(pd[2])
         
-        paid_date_f = Date.new paidyear.to_i, pd[0].to_i, pd[1].to_i
+=begin
+pd[2] = '10'
+
+For reference from above: 
+def set_full_year(yr)
+  if yr.to_i > 50
+    fullyr = '19' + yr
+  else
+    fullyr = '20' + yr
+  end
+  return fullyr
+end
+
+paidyear = "2010"
+=end
+
+        paid_date_f = Date.new(paidyear.to_i, pd[0].to_i, pd[1].to_i)
+        # #<Date: 2010-06-02 ((2455350j,0s,0n),+0s,2299161j)>
 
         fiscalyr = find_fy(paid_date_f)
+
+=begin
+For reference from above: 
+def find_fy(adate)
+  theyear = adate.year
+  fystartnum = Date.new(theyear, $fystartmonth.to_i, $fystartday.to_i).yday
+  paydatenum = adate.yday
+  if paydatenum >= fystartnum
+    fy = theyear.to_i
+  else
+    fy = theyear.to_i - 1
+  end
+end
+
+theyear = 2010
+
+fystartnum = Date.new(2010, 7, 1).yday
+fystartnum = 182 (the 182nd day of the year)
+
+paydatenum = 153
+
+fy (fiscalyr) = 2009
+=end
+        
         fylabel = get_fy_label(fiscalyr)
         
+=begin
+For reference from above: 
+def get_fy_label(yr)
+  thisyear = yr.to_i
+  nextyear = thisyear + 1
+  label = "FY#{thisyear}-#{nextyear}"
+  return label
+end
+
+thisyear = 2009
+nextyear = 2010
+label = "FY#2009-2010"
+=end
+
         @output_lines << [order_num, fylabel, other_data, payment].flatten.join("\t")
       end
+      # Done with that one pline (single payment line in an order)
+      # Go to the next pline for this order if there is one
     end
+    # Done with that order and all its payments
 
     File.open "output/payments.txt", "wb" do |f|
       @output_lines.each {|l| f.puts l}
