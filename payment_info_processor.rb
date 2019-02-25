@@ -16,9 +16,11 @@ exit if Object.const_defined?(:Ocra)
 #   fy_begin_month = 7↩️
 #   fy_begin_day = 1↩️
 # Not all institutions use the same fiscal year dates, so this makes the script
-#  more flexible. 
+#  more flexible.
+# The weird curved arrow symbols at the end of each line are there to remind you that
+#  the computer knows about invisible characters such as line breaks
 
-#test that config file exists
+# Test that config file exists
 config_path = Pathname.new("data/payment_processor_config.txt")
 unless config_path.exist?
   puts "\n\nCannot find config file: data/payment_processor_config.txt"
@@ -27,11 +29,13 @@ unless config_path.exist?
   exit
 end
 
-#load config settings into array
+# Load config settings into array
 config_lines = []
 config_path.each_line do |ln|
   ln.chomp!
   config_lines << ln
+  # RESULT:
+  # ['fy_begin_month = 7', 'by_begin_day = 1']
 end
 
 #make sure the month is set properly
@@ -51,8 +55,8 @@ unless config_lines[1].match(/^fy_begin_day = \d\d?\s*$/)
 end
 
 #set the fy start variables
-$fystartmonth = config_lines[0].gsub /^.* = /, ''
-$fystartday = config_lines[1].gsub /^.* = /, ''
+$fystartmonth = config_lines[0].gsub /^.* = /, '' # '7'
+$fystartday = config_lines[1].gsub /^.* = /, ''   # '1'
 
 #make sure date created from config month and year is valid
 unless Date.valid_date?(2012, $fystartmonth.to_i, $fystartday.to_i)
@@ -168,19 +172,58 @@ if results == "y"
 end
 
 lines = IO.readlines("data/payment_data.txt")
+
+=begin
+First two lines of file:
+RECORD #(ORDER)*TITLE*FUND*Paid Date*Invoice Date*Invoice Num*Amount Paid*Voucher Num*Copies*Sub From*Sub To*Note
+o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821
+=end
+
 lines.each {|l| l.gsub! /"/, '' ; l.chomp!}
 
 #Grab headers, break up meaningfully, and hash for later use
 headers = lines.shift.split("*")
-# p headers
+
+=begin
+headers = ["RECORD #(ORDER)", "TITLE", "FUND", "Paid Date", "Invoice Date", "Invoice Num", "Amount Paid", "Voucher Num", "Copies", "Sub From", "Sub To", "Note"]
+
+lines = "o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+=end
+
 hdr = {}
 hdr[:onum] = headers.shift
-# 9 is the number of fields of payment data that get repeated.
+
+=begin
+hdr = { :onum = "RECORD #(ORDER)" }
+headers = ["TITLE", "FUND", "Paid Date", "Invoice Date", "Invoice Num", "Amount Paid", "Voucher Num", "Copies", "Sub From", "Sub To", "Note"]
+=end
+
 hdr[:payment_headers] = headers.pop(9)
+
+=begin
+There are NINE payment fields that get repeated on the end of each line
+ in the output.
+
+hdr = { :onum = "RECORD #(ORDER)",
+        :payment_headers = ["Paid Date", "Invoice Date", "Invoice Num", 
+                            "Amount Paid", "Voucher Num", "Copies",
+                            "Sub From", "Sub To", "Note" 
+                           ]
+      }
+headers = ["TITLE", "FUND"]
+=end
+
 hdr[:other_headers] = headers
-#p hdr[:payment_headers]
-#p hdr[:other_headers]
-#p hdr
+
+=begin
+hdr = { :onum = "RECORD #(ORDER)",
+        :payment_headers = ["Paid Date", "Invoice Date", "Invoice Num", 
+                            "Amount Paid", "Voucher Num", "Copies",
+                            "Sub From", "Sub To", "Note" 
+                           ],
+        :other_headers = ["TITLE", "FUND"]
+      }
+=end
 
 puts "\n\nWhat output would you like?"
 
@@ -189,8 +232,41 @@ choose do |menu|
     @output_lines = []
     @output_lines << [hdr[:onum], "FY", hdr[:other_headers], hdr[:payment_headers]].flatten.join("\t")
     
+=begin
+Before we flatten: 
+@output_lines = ["RECORD #(ORDER)",
+                 "FY",
+                 ["TITLE", "FUND"],
+                 ["Paid Date", "Invoice Date", "Invoice Num", 
+                  "Amount Paid", "Voucher Num", "Copies",
+                  "Sub From", "Sub To", "Note" 
+                 ]
+                ]
+
+After flattening: 
+@output_lines = ["RECORD #(ORDER)", "FY", "TITLE", "FUND",
+                 "Paid Date", "Invoice Date", "Invoice Num", 
+                 "Amount Paid", "Voucher Num", "Copies",
+                 "Sub From", "Sub To", "Note" 
+                ]
+
+The join turns these into one tab-delimited string: 
+"RECORD #(ORDER)\tFY\tTITLE\tFUND\tPaid Date\tInvoice Date\tInvoice Num\tAmount Paid\tVoucher Num\tCopies\tSub From\tSub To\tNote"
+=end
+
+=begin
+We only have one line in the lines variable, for demo purposes:
+
+lines = "o10002066*Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].*esoci*06-02-10*05-26-10*0106526*1591.57*218304*001*01-01-10*12-31-10*46(01/10)-47(12/10)!B9451699\;02-28-11*02-16-11*0199422*1662.09*224256*001*01-01-11*12-31-11*47(01/11)-48(12/11)!D4685821"
+=end
+    
     lines.each do |l|
       line = l.split("*")
+      
+=begin
+line = ["o10002066", "Africa research bulletin. Economic, financial, and technical series (1992 : Online);Africa research bulletin. Economic, financial, and technical series [electronic resource].", "esoci", "06-02-10", "05-26-10", "0106526", "1591.57", "218304", "001", "01-01-10", "12-31-10", "46(01/10)-47(12/10)!B9451699;02-28-11", "02-16-11", "0199422", "1662.09", "224256", "001", "01-01-11", "12-31-11", "47(01/11)-48(12/11)!D4685821"]
+=end
+
       order_num = line.shift
       
       # How many fields come before the payment data starts?
