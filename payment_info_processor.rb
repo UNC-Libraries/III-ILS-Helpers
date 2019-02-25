@@ -1,9 +1,22 @@
-require 'rubygems'
-require 'highline/import'
+# coding: utf-8
+# Using some standard libraries
 require 'date'
 require 'pathname'
 
+# Using some external Ruby Gems
+require 'rubygems'
+require 'highline/import'
+
+# Ocra = One-Click Ruby Application Builder
+# This is here for building the Windows executable version
 exit if Object.const_defined?(:Ocra)
+
+# There should be a "payment_processor_config.txt" file in the data directory
+# It is just 2 lines and looks like:
+#   fy_begin_month = 7↩️
+#   fy_begin_day = 1↩️
+# Not all institutions use the same fiscal year dates, so this makes the script
+#  more flexible. 
 
 #test that config file exists
 config_path = Pathname.new("data/payment_processor_config.txt")
