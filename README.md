@@ -89,6 +89,9 @@ FIELD DELIMITER:
 TEXT QUALIFIER:
 - Text qualifier = None
 
+REPEATED FIELD DELIMITER (leave as default):
+- ASCII character = ;
+
 ### Exported file name and location
 - File name *must* be payment_data.txt
 - Save the file in the "data" folder inside your "ruby_scripts" folder
