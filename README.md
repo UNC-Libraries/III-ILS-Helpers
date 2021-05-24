@@ -1,7 +1,8 @@
 **Quick download links:**
-- [Windows 10 .exe](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)
-- [pre-Windows 10 .exe](http://infomuse.net/millennium-helpers/payment_info_processor.exe)
-- [Ruby script (.rb) .zip](https://github.com/UNC-Libraries/Millennium-Helpers/archive/master.zip)
+Download the appropriate version from the direct links below (or from [this page](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest)):
+- [Windows 10 .exe](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest/download/payment_info_processor_win10.exe)
+- [pre-Windows 10 .exe](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest/download/payment_info_processor.exe)
+- [Ruby script (.rb) .zip](https://github.com/UNC-Libraries/III-ILS-Helpers/archive/main.zip)
 
 **Script not working for you?** Check [here](https://github.com/UNC-Libraries/III-ILS-Helpers#frequent-issues-that-prevent-script-from-running-properly)
 
@@ -48,9 +49,7 @@ fy_begin_day = 1
 Change the number at the end of each line to reflect when your new fiscal year begins. Save and close payment_processor_config.txt.
 
 ## Windows .exe version
-Download Windows .exe file:
-- [pre-Windows 10](http://infomuse.net/millennium-helpers/payment_info_processor.exe)
-- [Windows 10](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)
+Download the .exe for your version of Windows (e.g. Windows 10; pre-Windows 10) from the page for the [latest release](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest).
 
 If a window pops up and asks you whether to save or open the file, select save.
 
@@ -66,7 +65,8 @@ gem install highline
 ```
 
 - Download the script
- - Click the "Download ZIP" button in the righthand column of https://github.com/UNC-Libraries/Millennium-Helpers
+ - Click the "Code > Download ZIP" button towards the top of <https://github.com/UNC-Libraries/III-ILS-Helpers>
+   - *OR*, download the `Source code (zip)` from the [latest release](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest)
  - Save file to your computer
  - Unzip the file you just saved
  - Move payment_info_processor.rb to ruby_scripts directory
@@ -118,7 +118,7 @@ If the script is failing to work for you, check the following:
 - Is there a typo in your input file name? It must be: payment_data.txt
 - And, if you just got a new computer:
   - Did you [define the beginning of your library's fiscal year in the configuration file](https://github.com/UNC-Libraries/III-ILS-Helpers#prepare-your-configuration-file-first-use-only)?
-  - If new computer is running Windows 10, did you get the [Windows 10 version of the script](http://infomuse.net/millennium-helpers/payment_info_processor_win10.exe)?
+  - If new computer is running Windows 10, make sure you have downloaded the **Windows 10 version** of the script from [here](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest)
 
 If none of those are the culprit, please go [here](https://github.com/UNC-Libraries/III-ILS-Helpers/issues) and open a new issue. Please attach the following:
 - your payment_data.txt input file
