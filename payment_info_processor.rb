@@ -431,19 +431,19 @@ label = "FY#2009-2010"
     puts "If there is no data for a year, its values will be zero."
     puts "\n\nType years below and hit enter/return:"
 
-    @@rawyears = gets.chomp.split(",")
+    rawyears = gets.chomp.split(",")
     #@@rawyears = ARGV[1].split(",")
     # p rawyears
 
     class Order
       attr_accessor :onum, :other, :payments, :years
-      def initialize(onum)
+      def initialize(onum, rawyears: [])
         @onum = onum
         @other = []
         @payments = []
         @years = {}
 
-        @@rawyears.each do |yr|
+        rawyears.each do |yr|
           @years[yr] = 0.0
         end
       end
@@ -483,8 +483,8 @@ label = "FY#2009-2010"
 
     lines.each do |l|
       line = l.split("*")
-      ord = Order.new(line.shift)
-      
+      ord = Order.new(line.shift, rawyears: rawyears)
+
       # How many fields come before the payment data starts?
       # However many times that is, shift the next field in the line to :other
 
@@ -527,7 +527,7 @@ label = "FY#2009-2010"
 
     output = []
     yrlabels = []
-    @@rawyears.each do |yr|
+    rawyears.each do |yr|
       yrlabels << get_fy_label(yr)
     end
     output << [hdr[:onum], hdr[:other_headers], yrlabels].flatten.join("\t")
