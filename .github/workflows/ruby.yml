@@ -1,0 +1,50 @@
+name: Ruby compatibility
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        ruby:
+          - '3.3'
+          - '3.4'
+    env:
+      BUNDLE_FROZEN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler: 2.5.23
+          bundler-cache: true
+      - name: Check syntax
+        run: bundle exec ruby -c payment_info_processor.rb
+      - name: Load HighLine
+        run: bundle exec ruby -e "require 'highline/import'"
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_FROZEN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler: 2.5.23
+          bundler-cache: true
+      - run: gem install bundler-audit --no-document
+      - run: bundle-audit check --update
