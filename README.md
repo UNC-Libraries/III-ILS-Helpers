@@ -1,22 +1,22 @@
-**Quick download links:**
-Download the appropriate version from the direct links below (or from [this page](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest)):
-- [Windows 10 .exe](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest/download/payment_info_processor_win10.exe)
-- [pre-Windows 10 .exe](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest/download/payment_info_processor.exe)
+**Quick download link:**
+Download latest version from the direct links below
 - [Ruby script (.rb) .zip](https://github.com/UNC-Libraries/III-ILS-Helpers/archive/main.zip)
+
+Old, unmaintained .exe versions are still available on the [v1.0 release](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/tag/v1.0)
 
 **Script not working for you?** Check [here](https://github.com/UNC-Libraries/III-ILS-Helpers#frequent-issues-that-prevent-script-from-running-properly)
 
 # Millennium/Sierra Payment Information Processor
-A helper for working with payment data exported from III Millennium or Sierra. The Windows .exe version of the script can be run by any Windows user, without the need to install Ruby and other dependencies.
+A helper for working with payment data exported from III Millennium or Sierra.
 
 Takes payment data exported from a Review File of order records. Outputs a tab-delimited .txt file that can be opened with Excel. There are two output types to choose from:
 - *Individual payments* - outputs one line per payment made. Data can be further processed in Excel using PivotTables or other means. Each line contains order record number, fiscal year of payment, (other fields exported), payment data fields.
 - *Payments summarized by fiscal year* - outputs one line per order record. Each line contains order record number, (other fields exported), and one column for each fiscal year input by script user. Each of these columns contains total payment amount for that fiscal year.
 
 # Set up required before first use
-## ALL versions (Windows .exe and Ruby script (.rb))
-### Prepare your directory structure
-Choose or create a directory/folder in which to place the script (.rb or .exe). This directory can be called whatever you want, but here I'll call it the "ruby_scripts" directory.
+
+## Prepare your directory structure
+Choose or create a directory/folder in which to place the script (`.rb` file). This directory can be called whatever you want, but here I'll call it the "ruby_scripts" directory.
 
 In the ruby_scripts directory, create a new directory called "data".
 
@@ -30,11 +30,12 @@ The structure should look like this:
 -- output
 ```
 
-Put the payment_info_processor .rb or .exe file(s) in the ruby_scripts directory.
+Put the payment_info_processor .rb file in the ruby_scripts directory.
 
 <i>Note for more advanced users: You can run the script from anywhere; there doesn't have to be a ruby_scripts directory. BUT, there must be a data directory and an output directory in whatever directory you are running the script from. It's clunky and inflexible, but it is the only way I know to make the .exe version work for my colleagues who don't know how to use the command line.</i>
 
-### Prepare your configuration file (First use only)
+## Prepare your configuration file (First use only)
+
 The configuration file will tell the script when your new fiscal year begins. I will use my institution as an example. Our fiscal year runs from July 1 to June 30.
 
 In the ruby_scripts/data directory, create a new text file named payment_processor_config.txt
@@ -47,13 +48,6 @@ fy_begin_day = 1
 ```
 
 Change the number at the end of each line to reflect when your new fiscal year begins. Save and close payment_processor_config.txt.
-
-## Windows .exe version
-Download the .exe for your version of Windows (e.g. Windows 10; pre-Windows 10) from the page for the [latest release](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest).
-
-If a window pops up and asks you whether to save or open the file, select save.
-
-Save the file into your ruby_scripts directory.
 
 ## Ruby script (.rb) version
 - Install [Ruby](http://www.ruby-lang.org/en/). Point-and-click Windows .exe Ruby installers are [available for Windows](http://rubyinstaller.org/).
@@ -98,10 +92,7 @@ REPEATED FIELD DELIMITER (leave as default):
 
 
 ## Run the script
-### .exe version
-Just double-click it!
 
-### rb version
 At command line, from inside ruby_scripts directory:
 - ruby payment_info_processor.rb
 
@@ -118,7 +109,6 @@ If the script is failing to work for you, check the following:
 - Is there a typo in your input file name? It must be: payment_data.txt
 - And, if you just got a new computer:
   - Did you [define the beginning of your library's fiscal year in the configuration file](https://github.com/UNC-Libraries/III-ILS-Helpers#prepare-your-configuration-file-first-use-only)?
-  - If new computer is running Windows 10, make sure you have downloaded the **Windows 10 version** of the script from [here](https://github.com/UNC-Libraries/III-ILS-Helpers/releases/latest)
 
 If none of those are the culprit, please go [here](https://github.com/UNC-Libraries/III-ILS-Helpers/issues) and open a new issue. Please attach the following:
 - your payment_data.txt input file
